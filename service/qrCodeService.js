@@ -26,6 +26,7 @@ function createVCard(user) {
   
   return `BEGIN:VCARD
 VERSION:3.0
+N:${user.firstName} ${user.lastName}
 FN:${user.firstName} ${user.lastName}
 TEL:${user.primaryPhone}
 EMAIL:${user.email}

@@ -63,7 +63,7 @@ async function updateUser(req, res) {
     res.status(500).json({ error: err.message });
   }
 }
-
+ 
 async function downloadQRCode(req, res) {
   try {
     const id = req.params.id;

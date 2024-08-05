@@ -22,7 +22,7 @@ async function generateQRCode(data, options) {
 
 function createVCard(user) {
 
-  console.log(user)
+ // console.log(user)
   
   return `BEGIN:VCARD
 VERSION:3.0

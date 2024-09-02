@@ -1,16 +1,15 @@
+
 const User = require('../model/user');
-const { generateQRCode, createVCard } = require('./qrCodeService');
+const { generateQRCode } = require('./qrCodeService');
 
 async function createUser(data, options) {
   const user = new User(data);
-  const vCardData = createVCard(user);
-  const qrCode = await generateQRCode(vCardData, options);
+  const profileUrl = `http://192.168.252.115:3000/profile/${user._id}`;
+  const qrCode = await generateQRCode(profileUrl, options);
   user.qrCodeUrl = qrCode;
 
   await user.save();
-
-  // console.log(qrCode);
-  return { user};
+  return { user };
 }
 
 async function getUserById(id) {
@@ -21,21 +20,16 @@ async function getUserById(id) {
 async function getAllUsers() {
   return User.find();
 }
+
 async function updateUser(id, data) {
   if (data.qrCodeUrl) {
     // En cas de mise à jour du QR code
-    const vCardData = createVCard(data);
-    //console.log(vCardData)
-
-    //console.log("--------",vCardData); 
-
-
-    const qrCodePath = await generateQRCode(vCardData, { 
-      primaryColor: data.primaryColor || '#000000', 
+    const profileUrl = `http://192.168.252.115:3000/profile/${id}`;
+    const qrCodePath = await generateQRCode(profileUrl, {
+      primaryColor: data.primaryColor || '#000000',
       secondaryColor: data.secondaryColor || '#FFFFFF',
       shape: data.shape || 'circle'
     });
-
     data.qrCodeUrl = qrCodePath;
   }
 

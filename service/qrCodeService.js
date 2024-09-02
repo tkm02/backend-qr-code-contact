@@ -3,10 +3,12 @@ const { createCanvas } = require('canvas');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 
-async function generateQRCode(data, options) {
+async function generateQRCode(userId, options) {
   try {
+    const profileUrl = `${userId}`;
+    console.log(profileUrl);
     const canvas = createCanvas(500, 500);
-    await QRCode.toCanvas(canvas, data, {
+    await QRCode.toCanvas(canvas, profileUrl, {
       width: 300,
       margin: 2,
       color: {
@@ -14,33 +16,53 @@ async function generateQRCode(data, options) {
         light: options.secondaryColor,
       },
     });
-    return canvas.toDataURL();  
+    return canvas.toDataURL();
   } catch (err) {
     console.error(err);
+    throw err;
   }
 }
 
-function createVCard(user) {
+// function createVCard(user) {
+//   return `BEGIN:VCARD
+// VERSION:3.0
+// N:${user.firstName} ${user.lastName}
+// FN:${user.firstName} ${user.lastName}
+// TEL:${user.primaryPhone}
+// EMAIL:${user.email}
+// URL:${user.website}
+// ORG:${user.companyName}
+// TITLE:${user.profession}
+// ADR:${user.city}, ${user.country} ${user.postalCode}
+// NOTE:${Object.values(user.socialLinks).join(', ')}
+// END:VCARD`;
+// }
 
- // console.log(user)
-  
+function createVCard(user) {
   return `BEGIN:VCARD
 VERSION:3.0
-N:${user.firstName} ${user.lastName}
+N:${user.lastName};${user.firstName};;;
 FN:${user.firstName} ${user.lastName}
-TEL:${user.primaryPhone}
-EMAIL:${user.email}
-URL:${user.website}
-ORG:${user.companyName}
-TITLE:${user.profession}
-ADR:${user.city}, ${user.country} ${user.postalCode}
-NOTE:${Object.values(user.socialLinks).join(', ')}
+TEL;TYPE=HOME,VOICE:${user.personalPhone}
+TEL;TYPE=WORK,VOICE:${user.professionalPhone || ''}
+EMAIL;TYPE=HOME,INTERNET:${user.personalEmail}
+EMAIL;TYPE=WORK,INTERNET:${user.professionalEmail || ''}
+URL:${user.website || ''}
+ORG:${user.companyName || ''}
+TITLE:${user.profession || ''}
+ADR;TYPE=WORK:;;${user.city || ''};${user.country || ''};${user.postalCode || ''}
+NOTE:${user.bio || ''}
+${Object.entries(user.socialLinks || {})
+  .filter(([_, value]) => value)
+  .map(([key, value]) => `X-SOCIAL-${key.toUpperCase()}:${value}`)
+  .join('\n')}
 END:VCARD`;
 }
 
-async function downloadQRCode(format, data, options) {
+async function downloadQRCode(format, userId, options) {
+  const profileUrl = `http://192.168.252.115:3000/profile/${userId}`;
   const canvas = createCanvas(500, 500);
-  await QRCode.toCanvas(canvas, data, {
+  await QRCode.toCanvas(canvas, profileUrl, {
     width: 500,
     margin: 2,
     color: {
@@ -67,8 +89,8 @@ async function downloadQRCode(format, data, options) {
       doc.pipe(fs.createWriteStream(pdfPath));
       return pdfPath;
     default:
-      throw new Error('Invalid format');
+      throw new Error('Format invalide');
   }
 }
 
-module.exports = { generateQRCode, createVCard, downloadQRCode };
+module.exports = { generateQRCode, createVCard, downloadQRCode }; 

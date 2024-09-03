@@ -61,8 +61,9 @@ END:VCARD`;
 
 
 
-async function downloadQRCode(format, userId, options) {
-  const profileUrl = `https://userprofile-r0vi.onrender.com?id=${userId}`;
+async function downloadQRCode(format, userId, options,id) {
+  //console.log(id,"-------------");  
+  const profileUrl = `https://userprofile-r0vi.onrender.com?id=${id}`;
 
   const canvas = createCanvas(500, 500);
   await QRCode.toCanvas(canvas, profileUrl, {

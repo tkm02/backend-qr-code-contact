@@ -79,7 +79,7 @@ async function downloadQRCode(req, res) {
       primaryColor: user.primaryColor || '#000000',
       secondaryColor: user.secondaryColor || '#FFFFFF',
       shape: user.qrCodeShape || 'circle'
-    });
+    },id);
 
     res.download(qrCodePath);
   } catch (err) {

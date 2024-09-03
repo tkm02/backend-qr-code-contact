@@ -59,8 +59,11 @@ ${Object.entries(user.socialLinks || {})
 END:VCARD`;
 }
 
+
+
 async function downloadQRCode(format, userId, options) {
   const profileUrl = `https://userprofile-r0vi.onrender.com?id=${userId}`;
+
   const canvas = createCanvas(500, 500);
   await QRCode.toCanvas(canvas, profileUrl, {
     width: 500,
@@ -89,7 +92,7 @@ async function downloadQRCode(format, userId, options) {
       doc.pipe(fs.createWriteStream(pdfPath));
       return pdfPath;
     default:
-      throw new Error('Format invalide');
+      throw new Error('Invalid format');
   }
 }
 

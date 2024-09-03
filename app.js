@@ -4,7 +4,7 @@ const connectDB = require('./config/database');
 const userRouter = require("./routes/userRoute")
 const app = express();
 const cors = require('cors');
-
+ 
 app.use(bodyParser.json());
 
 connectDB();

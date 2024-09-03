@@ -6,7 +6,7 @@ const fs = require('fs');
 async function generateQRCode(userId, options) {
   try {
     const profileUrl = `${userId}`;
-    console.log(profileUrl);
+    // console.log(profileUrl);
     const canvas = createCanvas(500, 500);
     await QRCode.toCanvas(canvas, profileUrl, {
       width: 300,
@@ -60,7 +60,7 @@ END:VCARD`;
 }
 
 async function downloadQRCode(format, userId, options) {
-  const profileUrl = `http://192.168.252.115:3000/profile/${userId}`;
+  const profileUrl = `http://192.168.1.15:5500/index.html?id=${userId}`;
   const canvas = createCanvas(500, 500);
   await QRCode.toCanvas(canvas, profileUrl, {
     width: 500,

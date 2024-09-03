@@ -4,7 +4,7 @@ const { generateQRCode } = require('./qrCodeService');
 
 async function createUser(data, options) {
   const user = new User(data);
-  const profileUrl = `http://192.168.1.15:5500/index.html?id=${user._id}`;
+  const profileUrl = `https://userprofile-r0vi.onrender.com?id=${user._id}`;
   const qrCode = await generateQRCode(profileUrl, options);
   user.qrCodeUrl = qrCode;
 
@@ -24,7 +24,7 @@ async function getAllUsers() {
 async function updateUser(id, data) {
   if (data.qrCodeUrl) {
     // En cas de mise à jour du QR code
-    const profileUrl = `http://192.168.1.15:5500/index.html?id=${id}`;
+    const profileUrl = `https://userprofile-r0vi.onrender.com?id=${id}`;
     const qrCodePath = await generateQRCode(profileUrl, {
       primaryColor: data.primaryColor || '#000000',
       secondaryColor: data.secondaryColor || '#FFFFFF',
